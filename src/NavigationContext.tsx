@@ -58,7 +58,7 @@ export function NavigationContextProvider({
   const location = useLocation();
   const router = useRouter();
 
-  useEffect(() => router.replacePage(RoutingPages.home), []);
+  useEffect(() => router.replacePage(RoutingPages.chatTerminal), []);
 
   const activePanel = location.getViewActivePanel(Views.viewMain)!;
 

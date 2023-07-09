@@ -8,6 +8,7 @@ import { ChatGptInterview } from "$/entity/GPT/ChatGptInterview";
 import { ChatGptLeetCode } from "$/entity/GPT/ChatGptLeetCode";
 import { interviews } from "$/entity/interview";
 import { ChatGptTrainer } from "$/entity/GPT/ChatGptTrainer";
+import { ChatGptTerminal } from "$/entity/GPT/ChatGptTerminal";
 
 export class ChatGpt {
   history = new GptHistoryDialogs();
@@ -20,6 +21,8 @@ export class ChatGpt {
   chatGptLeetCode = new ChatGptLeetCode();
 
   chatGptTrainer = new ChatGptTrainer();
+
+  chatGptTerminal = new ChatGptTerminal();
 
   currentChatGpt$ = sig<ChatGptTemplate>(this.chatGptFree);
 

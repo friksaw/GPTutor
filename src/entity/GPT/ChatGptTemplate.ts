@@ -140,6 +140,7 @@ export abstract class ChatGptTemplate {
       this.onMessage(message),
       () => {
         this.closeDelay();
+
         this.addMessage(
           new GptMessage(
             "Сеть ChatGPT перегружена. Попробуйте через минуту",
@@ -148,6 +149,8 @@ export abstract class ChatGptTemplate {
             true
           )
         );
+
+        window.dispatchEvent(new Event("chat-message"));
         this.sendCompletions$.reset();
       },
       this.abortController
@@ -174,8 +177,12 @@ export abstract class ChatGptTemplate {
     if (isFirst) {
       message.onSetMessageContent(value);
       this.addMessage(message);
+      window.dispatchEvent(new Event("chat-message"));
+
       return;
     }
+
+    window.dispatchEvent(new Event("chat-message"));
     message.onSetMessageContent(value);
   };
 

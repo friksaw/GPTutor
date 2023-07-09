@@ -39,6 +39,7 @@ import { AppAlert } from "./modals/AppAlert";
 import { CodeEditor } from "./panels/CodeEditor";
 import { ChatTrainer } from "./panels/ChatTrainer";
 import UtilBlock from "./UtilBlock";
+import { ChatTerminal } from "$/panels/ChatTerminal";
 
 const App = () => {
   const location = useLocation();
@@ -82,6 +83,7 @@ const App = () => {
           onSwipeBack={goBack}
           history={history}
         >
+          <ChatTerminal id={Panels.chatTerminal} />
           <ChatSettings id={Panels.chatSettings} />
           <CodeEditor id={Panels.editor} />
           <ChatTrainer id={Panels.chatTrainer} />
