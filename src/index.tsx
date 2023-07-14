@@ -51,6 +51,7 @@ const routes = {
   [RoutingPages.editor]: new Page(Panels.editor, Views.viewMain),
   [RoutingPages.chatTrainer]: new Page(Panels.chatTrainer, Views.viewMain),
   [RoutingPages.chatSettings]: new Page(Panels.chatSettings, Views.viewMain),
+  [RoutingPages.translator]: new Page(Panels.translator, Views.viewMain),
   [RoutingPages.leetcodeProblems]: new Page(
     Panels.leetcodeProblems,
     Views.viewMain

@@ -38,6 +38,7 @@ import { ProblemDetail } from "./panels/ProblemDetail";
 import { AppAlert } from "./modals/AppAlert";
 import { CodeEditor } from "./panels/CodeEditor";
 import { ChatTrainer } from "./panels/ChatTrainer";
+import { Translator } from "./panels/Translator";
 import UtilBlock from "./UtilBlock";
 
 const App = () => {
@@ -96,6 +97,7 @@ const App = () => {
           <LeetcodeProblems id={Panels.leetcodeProblems} />
           <ChatLeetCode id={Panels.chatLeetCode} />
           <ProblemDetail id={Panels.problemDetail} />
+          <Translator id={Panels.translator} />
         </View>
       </SplitLayout>
       <UtilBlock />
