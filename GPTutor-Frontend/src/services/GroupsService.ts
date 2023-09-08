@@ -17,6 +17,7 @@ class GroupsService {
         },
       })
       .then((data) => {
+        console.log(data);
         this.isDon = Boolean(data?.response);
       })
       .catch((error) => {

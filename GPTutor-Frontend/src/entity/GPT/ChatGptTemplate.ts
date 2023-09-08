@@ -68,6 +68,7 @@ export abstract class ChatGptTemplate {
   abortController = new AbortController();
 
   init() {
+    console.log(groupsService);
     if (groupsService.isDon) {
       this.timer.setDisabled();
     }
