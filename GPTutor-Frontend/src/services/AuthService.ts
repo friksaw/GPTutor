@@ -6,10 +6,11 @@ class AuthService {
   async setupToken() {
     await bridge
       .send("VKWebAppGetAuthToken", {
-        app_id: 51602327,
+        app_id: 51692825,
         scope: "groups",
       })
       .then((data) => {
+        console.log(data);
         if (data.access_token) {
           this.token = data.access_token;
         }
