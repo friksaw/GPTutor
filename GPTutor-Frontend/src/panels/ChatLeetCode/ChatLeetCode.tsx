@@ -33,7 +33,7 @@ function ChatLeetCode({ id }: IProps) {
     const currentContent = leetCode.currentProblem?.data.question.content;
 
     chatGpt.chatGptLeetCode.initSystemMessage();
-    chatGpt.chatGptLeetCode.isBlockActions$.set(!currentContent);
+    chatGpt.chatGptLeetCode.$isBlockActions = !currentContent;
   }, []);
 
   useEffect(() => {
@@ -47,7 +47,7 @@ function ChatLeetCode({ id }: IProps) {
     );
   }, []);
 
-  const isStopped = chatGpt.chatGptLeetCode.timer.isStopped$.get();
+  const isStopped = chatGpt.chatGptLeetCode.timer.$isStopped;
 
   return (
     <Panel id={id}>

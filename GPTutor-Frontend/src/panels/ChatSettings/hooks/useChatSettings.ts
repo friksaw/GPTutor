@@ -8,8 +8,8 @@ function useChatSettings(chatGpt: ChatGptTemplate) {
   const { openAlert, goBack } = useNavigationContext();
 
   const router = useRouter();
-  const systemMessageContent = chatGpt.systemMessage.content$;
-  const systemMessage = systemMessageContent.get();
+  const systemMessageContent = chatGpt.systemMessage.$content;
+  const systemMessage = systemMessageContent;
 
   const [systemMessageValue, setSystemMessageValue] = useState(systemMessage);
   const initialMessage = useRef(systemMessage);
@@ -21,7 +21,7 @@ function useChatSettings(chatGpt: ChatGptTemplate) {
 
   const resetSystemMessage = () => {
     chatGpt.resetSystemMessage();
-    setSystemMessageValue(systemMessageContent.get());
+    setSystemMessageValue(systemMessageContent);
   };
 
   const clearSystemMessage = () => {
@@ -34,8 +34,8 @@ function useChatSettings(chatGpt: ChatGptTemplate) {
   };
 
   const onSubmit = () => {
-    if (chatGpt.messages$.get().length === 0) {
-      systemMessageContent.set(systemMessageValue);
+    if (chatGpt.$messages.length === 0) {
+      chatGpt.systemMessage.$content = systemMessageValue;
       router.popPage();
 
       snackbarNotify.notify({
@@ -61,7 +61,7 @@ function useChatSettings(chatGpt: ChatGptTemplate) {
     });
 
     chatGpt.clearMessages();
-    systemMessageContent.set(systemMessageValue);
+    chatGpt.systemMessage.$content = systemMessageValue;
     goBack();
     goBack();
   };

@@ -48,7 +48,7 @@ function CodeEditor({ id }: IProps) {
               <AppPanelHeader
                 before={<PanelHeaderBack onClick={goBack} />}
                 after={
-                  chatGpt.chatGptTrainer.timer.isStopped$.get() ? (
+                  chatGpt.chatGptTrainer.timer.$isStopped ? (
                     <IconButton
                       disabled={chatGpt.chatGptTrainer.sendCompletions$.loading.get()}
                       className={classes.play}
@@ -70,7 +70,7 @@ function CodeEditor({ id }: IProps) {
                       <Icon32Play width={26} height={26} />
                     </IconButton>
                   ) : (
-                    <Time seconds={chatGpt.chatGptTrainer.timer.time$.get()} />
+                    <Time seconds={chatGpt.chatGptTrainer.timer.$time} />
                   )
                 }
               >

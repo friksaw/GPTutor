@@ -57,17 +57,15 @@ function MessengerList({
   startIsDisabled,
   placeholderText,
 }: IProps) {
-  const messages = chatGpt.messages$.get();
-  const isStopped = chatGpt.timer.isStopped$.get();
 
-  if (messages.length === 0) {
+  if (chatGpt.$messages.length === 0) {
     return (
       <div className={classes.placeholderContainer}>
         <Placeholder
           header={placeholderHeader || "Начните диалог"}
           action={
             <Button
-              disabled={startIsDisabled || !isStopped}
+              disabled={startIsDisabled || !chatGpt.timer.$isStopped}
               aria-label={startText || "Начать"}
               mode="outline"
               size="m"
@@ -85,11 +83,11 @@ function MessengerList({
 
   return (
     <div className={classes.messagesContainer}>
-      {messages.map((message, index) => (
+      {chatGpt.$messages.map((message, index) => (
         <Message key={index} chatGpt={chatGpt} message={message} />
       ))}
     </div>
   );
 }
 
-export default memo(MessengerList);
+export default MessengerList;

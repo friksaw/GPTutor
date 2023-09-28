@@ -1,7 +1,7 @@
 import { sig } from "dignals";
 
 class AppService {
-  loading = sig(true);
+  loading = sig(false);
 
   toggleLoading() {
     this.loading.set(!this.loading.get());

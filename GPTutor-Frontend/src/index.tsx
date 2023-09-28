@@ -1,5 +1,6 @@
 import "./env-config.js";
 import "dignals-react/jsxPatch17";
+import { enableLogger } from "dignals";
 
 import React from "react";
 import ReactDOM from "react-dom";
@@ -18,6 +19,8 @@ import { adService } from "$/services/AdService";
 import { authService } from "$/services/AuthService";
 import { groupsService } from "$/services/GroupsService";
 import { appService } from "$/services/AppService";
+
+// enableLogger();
 
 const isFirstVisitFlagName = "isFirstVisit";
 

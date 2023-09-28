@@ -1,15 +1,13 @@
-import { sig, Signal } from "dignals";
 import { GPTRoles } from "./types";
+import { createReactiveModelBuilder } from "dignals-model";
 
 let id = 0;
 
 export class GptMessage {
-  content$: Signal<string>;
-  isSelected$ = sig<boolean>(false);
-
-  failedModeration$ = sig<boolean>(false);
-
-  isRunOutOfContext = sig<boolean>(false);
+  $content: string;
+  $isSelected = false;
+  $failedModeration = false;
+  $isRunOutOfContext = false;
 
   id: number = id;
 
@@ -19,27 +17,33 @@ export class GptMessage {
     public inLocal?: boolean,
     public isError?: boolean
   ) {
-    this.content$ = sig(message);
+    this.$content = message;
     id++;
   }
 
+  setContent(content: string) {
+    this.$content = content;
+  }
+
   onSetMessageContent = (value: string) => {
-    this.content$.set(this.content$.get() + value);
+    this.$content = this.$content + value;
   };
 
   toggleSelected() {
-    this.isSelected$.set(!this.isSelected$.get());
+    this.$isSelected = !this.$isSelected;
   }
 
   select() {
-    this.isSelected$.set(true);
+    this.$isSelected = true;
   }
 
   unselect() {
-    this.isSelected$.set(false);
+    this.$isSelected = false;
   }
 
   toggleRunOutOff() {
-    this.isRunOutOfContext.set(true);
+    this.$isRunOutOfContext = true;
   }
 }
+
+export const GptMessageBuilder = createReactiveModelBuilder(GptMessage);

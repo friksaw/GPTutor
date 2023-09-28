@@ -30,10 +30,10 @@ function MessengerParagraph({ message }: IProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const markdown = useMemo(() => new Markdown(), []);
   const html = markdown.render(
-    message.isError ? errorContent : message.content$.get()
+    message.isError ? errorContent : message.$content
   );
 
-  if (message.failedModeration$.get()) {
+  if (message.$failedModeration) {
     return (
       <div className={classes.paragraph}>
         <ErrorBlock />

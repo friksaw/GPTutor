@@ -55,7 +55,7 @@ function Home({ id }: IProps) {
             if (chapter.type.includes("TRAINING")) {
               trainers.setCurrentTrainer(chapter.type as ModeType);
               trainers.getCurrentTrainer()?.setInitialValue();
-              chatGpt.chatGptTrainer.messages$.set([]);
+              chatGpt.chatGptTrainer.$messages = [];
               goToEditor();
               return;
             }

@@ -32,13 +32,13 @@ function WriteBarAfter({
 
   const isTyping = chatGptModel.sendCompletions$.loading.get();
 
-  const timerIsStopped = chatGptModel.timer.isStopped$.get();
-  const time = chatGptModel.timer.time$.get();
+  const timerIsStopped = chatGptModel.timer.$isStopped;
+  const time = chatGptModel.timer.$time;
 
   const removeDialogDisable =
-    chatGptModel.messages$.get().length < 2 || isTyping;
+    chatGptModel.$messages.length < 2 || isTyping;
 
-  const blockActions = chatGptModel.isBlockActions$.get();
+  const blockActions = chatGptModel.$isBlockActions;
 
   const applySettings = () => {
     if (!chatGptModel.currentHistory) return;

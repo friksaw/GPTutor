@@ -10,8 +10,8 @@ interface IProps {
 
 function ChatFreeAdditionalRequests({ handleSend }: IProps) {
   const isTyping = chatGpt.chatGptFree.sendCompletions$.loading.get();
-  const isStopped = chatGpt.chatGptFree.timer.isStopped$.get();
-  const hasMessages = chatGpt.chatGptFree.messages$.get().length !== 0;
+  const isStopped = chatGpt.chatGptFree.timer.$isStopped;
+  const hasMessages = chatGpt.chatGptFree.$messages.length !== 0;
 
   const isDisabled = isTyping || !isStopped || !hasMessages;
   return (
@@ -21,7 +21,7 @@ function ChatFreeAdditionalRequests({ handleSend }: IProps) {
         <Button
           disabled={isDisabled}
           onClick={() =>
-            handleSend(chatGpt.chatGptFree.getLastUserMessage()!.content$.get())
+            handleSend(chatGpt.chatGptFree.getLastUserMessage()!.$content)
           }
         >
           Повтор последнего сообщения

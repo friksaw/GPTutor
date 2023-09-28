@@ -23,13 +23,13 @@ function ChatInterviewAdditionalRequests({
 
   if (!currentInterview) return null;
 
-  const isStarted = chatGpt.chatGptInterview.isStarted$.get();
+  const isStarted = chatGpt.chatGptInterview.$isStarted;
 
   const currentQuestion = currentInterview.getCurrentQuestion();
 
   const isTyping = chatGpt.chatGptInterview.sendCompletions$.loading.get();
   const isQuestioned = currentQuestion.isQuestioned$.get();
-  const isStopped = chatGpt.chatGptInterview.timer.isStopped$.get();
+  const isStopped = chatGpt.chatGptInterview.timer.$isStopped;
 
   const nextQuestionIsDisabled = !isStarted
     ? false

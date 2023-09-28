@@ -12,7 +12,7 @@ interface IProps {
 
 function ChatLeetCodeAdditionalRequests({ handleSend, isStopped }: IProps) {
   const isTyping = chatGpt.chatGptLeetCode.sendCompletions$.loading.get();
-  const isBlockActions = chatGpt.chatGptLeetCode.isBlockActions$.get();
+  const isBlockActions = chatGpt.chatGptLeetCode.$isBlockActions;
 
   const isDisabled = isTyping || !isStopped;
 

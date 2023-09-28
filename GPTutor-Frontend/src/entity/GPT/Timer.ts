@@ -1,10 +1,12 @@
 import { sig, Signal } from "dignals";
+import { createReactiveModelBuilder } from "dignals-model";
 
 export type TimerStrategy = "increment" | "decrement";
 
 export class Timer {
-  time$: Signal<number>;
-  isStopped$: Signal<boolean> = sig(true);
+  $time: number;
+  $isStopped = true;
+  isDisabled = false;
 
   private intervalId: NodeJS.Timeout | undefined;
 
@@ -13,10 +15,8 @@ export class Timer {
     private finish: number,
     private timerStrategy: TimerStrategy
   ) {
-    this.time$ = sig(start);
+    this.$time = start;
   }
-
-  isDisabled = false;
 
   setDisabled = () => {
     this.isDisabled = true;
@@ -25,8 +25,8 @@ export class Timer {
   run() {
     if (this.isDisabled) return;
 
-    this.time$ = sig(this.start);
-    this.isStopped$.set(false);
+    this.$time = this.start;
+    this.$isStopped = false;
     this.intervalId = setInterval(() => {
       this.processTime();
       this.check();
@@ -37,18 +37,20 @@ export class Timer {
     if (this.isDisabled) return;
 
     clearInterval(this.intervalId);
-    this.isStopped$.set(true);
+    this.$isStopped = true;
   }
 
   private check() {
-    if (this.time$.get() === this.finish) this.stop();
+    if (this.$time === this.finish) this.stop();
   }
 
   private processTime() {
     if (this.timerStrategy === "increment") {
-      this.time$.set(this.time$.get() + 1);
+      this.$time = this.$time + 1;
     } else {
-      this.time$.set(this.time$.get() - 1);
+      this.$time = this.$time - 1;
     }
   }
 }
+
+export const TimerBuilder = createReactiveModelBuilder(Timer);

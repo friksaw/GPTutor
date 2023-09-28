@@ -1,11 +1,11 @@
-import { batch, memo, sig } from "dignals";
+import { batch } from "dignals";
 
 import { sendChatCompletions } from "$/api/completions";
 import ReactivePromise from "$/services/ReactivePromise";
 
 import { GPTDialogHistoryData, GPTDialogHistoryType, GPTRoles } from "./types";
-import { GptMessage } from "./GptMessage";
-import { Timer } from "$/entity/GPT/Timer";
+import { GptMessage, GptMessageBuilder } from "./GptMessage";
+import { TimerBuilder } from "$/entity/GPT/Timer";
 import { lessonsController, ModeType } from "$/entity/lessons";
 import { createHistory } from "$/api/history";
 import { createMessage, getMessagesById } from "$/api/messages";
@@ -18,21 +18,20 @@ import { groupsService } from "$/services/GroupsService";
 const MAX_CONTEXT_WORDS = 1000;
 
 export abstract class ChatGptTemplate {
-  isBlockActions$ = sig(false);
-
   currentHistory: History | null = null;
   initialSystemContent = "";
-
-  systemMessage = new GptMessage(this.initialSystemContent, GPTRoles.system);
-
-  timer = new Timer(20, 0, "decrement");
-
-  messages$ = sig<GptMessage[]>([]);
-
   delayTimeout: NodeJS.Timeout | null = null;
+  abortController = new AbortController();
+
+  $isBlockActions = false;
+  $messages: GptMessage[] =[];
+  $isDelay = false;
+
+  systemMessage = GptMessageBuilder.create(this.initialSystemContent, GPTRoles.system);
+  timer = TimerBuilder.create(20, 0, "decrement");
 
   sendCompletions$ = ReactivePromise.create(() => {
-    this.delayTimeout = setTimeout(() => this.isDelay$.set(true), 8000);
+    this.delayTimeout = setTimeout(() => this.$isDelay = true, 8000);
 
     return this.sendCompletion();
   });
@@ -41,27 +40,19 @@ export abstract class ChatGptTemplate {
 
   getMessages$ = ReactivePromise.create(getMessagesById);
 
-  isDelay$ = sig(false);
+  get $selectedMessages() {
+    return this.$messages.filter((message) => message.$isSelected)
+  }
+  get $getRunOutOfContextMessages() {
+    return this.$messages.filter((message) => message.$isRunOutOfContext)
+  }
+  get $getIsNotRunOutOfContextMessages() {
+    return this.$messages.filter((message) => !message.$isRunOutOfContext)
+  }
+  get $hasSelectedMessages() {
+    return this.$selectedMessages.length !== 0;
+  }
 
-  inLocalMessages$ = memo(() =>
-    this.messages$.get().filter((message) => message.inLocal)
-  );
-
-  selectedMessages$ = memo(() =>
-    this.messages$.get().filter((message) => message.isSelected$.get())
-  );
-
-  getRunOutOfContextMessages$ = memo(() =>
-    this.messages$.get().filter((message) => message.isRunOutOfContext.get())
-  );
-
-  getIsNotRunOutOfContextMessages$ = memo(() =>
-    this.messages$.get().filter((message) => !message.isRunOutOfContext.get())
-  );
-
-  hasSelectedMessages$ = memo(() => this.selectedMessages$.get().length !== 0);
-
-  abortController = new AbortController();
 
   init() {
     if (groupsService.isDon) {
@@ -71,12 +62,12 @@ export abstract class ChatGptTemplate {
 
   closeDelay() {
     this.delayTimeout && clearTimeout(this.delayTimeout);
-    this.isDelay$.set(false);
+    this.$isDelay = false;
   }
 
   clearMessages = () => {
     this.abortSend();
-    this.messages$.set([]);
+    this.$messages = [];
     this.currentHistory = null;
   };
 
@@ -89,11 +80,11 @@ export abstract class ChatGptTemplate {
   }
 
   clearSystemMessage = () => {
-    this.systemMessage.content$.set("");
+    this.systemMessage.setContent("");
   };
 
   resetSystemMessage = () => {
-    this.systemMessage.content$.set(this.initialSystemContent);
+    this.systemMessage.setContent(this.initialSystemContent);
   };
 
   abortSend = () => {
@@ -102,18 +93,19 @@ export abstract class ChatGptTemplate {
   };
 
   blockActions = () => {
-    this.isBlockActions$.set(true);
+    this.$isBlockActions = true;
   };
 
   allowActions = () => {
-    this.isBlockActions$.set(false);
+    this.$isBlockActions = false;
   };
 
   send = async (content: string) => {
+    this.sendCompletions$.loading.set(true);
+    const message = new GptMessage(content, GPTRoles.user);
+    this.addMessage(message);
+
     try {
-      this.sendCompletions$.loading.set(true);
-      const message = new GptMessage(content, GPTRoles.user);
-      this.addMessage(message);
       await this.createHistory();
       await this.postMessage(message);
 
@@ -162,12 +154,12 @@ export abstract class ChatGptTemplate {
   }
 
   checkOnRunOutOfMessages() {
-    [...this.messages$.get()].reverse().reduce((acc, message) => {
+    [...this.$messages].reverse().reduce((acc, message) => {
       if (acc > MAX_CONTEXT_WORDS) {
         message.toggleRunOutOff();
         return acc;
       }
-      return acc + message.content$.get().split(" ").length;
+      return acc + message.$content.split(" ").length;
     }, 0);
   }
 
@@ -185,26 +177,26 @@ export abstract class ChatGptTemplate {
   getMessages() {
     if (!this.systemMessage) {
       return this.filterInMemoryMessages(
-        this.getIsNotRunOutOfContextMessages$.get()
+        this.$getIsNotRunOutOfContextMessages
       ).map(this.toApiMessage);
     }
 
     return this.filterInMemoryMessages([
       this.systemMessage,
-      ...this.getIsNotRunOutOfContextMessages$.get(),
+      ...this.$getIsNotRunOutOfContextMessages,
     ]).map(this.toApiMessage);
   }
 
   clearSelectedMessages = () => {
     batch(() => {
-      this.selectedMessages$
-        .get()
+      this.$selectedMessages
         .forEach((message) => message.toggleSelected());
     });
   };
 
   addMessage(message: GptMessage) {
-    this.messages$.set([...this.messages$.get(), message]);
+    console.log("add message", message);
+    this.$messages = [...this.$messages, message];
   }
 
   async postMessage(message?: GptMessage) {
@@ -214,15 +206,15 @@ export abstract class ChatGptTemplate {
       historyId: this.currentHistory.id,
       error: !!message.isError,
       role: message.role,
-      content: message.content$.get(),
-      isFailedModeration: !message.failedModeration$.get(),
+      content: message.$content,
+      isFailedModeration: !message.$failedModeration,
       lastUpdated: new Date(),
       inLocal: !!message.inLocal,
     });
   }
 
   toApiMessage = (message: GptMessage) => ({
-    content: message.content$.get(),
+    content: message.$content,
     role: message.role,
   });
 
@@ -231,13 +223,13 @@ export abstract class ChatGptTemplate {
   }
 
   getLastUserMessage() {
-    return [...this.messages$.get()]
+    return [...this.$messages]
       .reverse()
       .find((message) => message.role === GPTRoles.user);
   }
 
   getLastMessage() {
-    const messages = this.messages$.get();
+    const messages = this.$messages;
     return messages[messages.length - 1];
   }
 
@@ -249,12 +241,12 @@ export abstract class ChatGptTemplate {
 
     const type = !data ? GPTDialogHistoryType.Free : data.chapterType;
 
-    const lengthMessages = this.messages$.get().length;
+    const lengthMessages = this.$messages.length;
     if (lengthMessages > 1) return;
 
     this.currentHistory = await this.createHistory$.run({
-      systemMessage: this.systemMessage.content$.get(),
-      lastMessage: lastMessage.content$.get(),
+      systemMessage: this.systemMessage.$content,
+      lastMessage: lastMessage.$content,
       lessonName: data?.lessonName || "",
       lastUpdated: new Date(),
       type,
@@ -315,7 +307,7 @@ export abstract class ChatGptTemplate {
     if (this.getMessages$.error.get()) {
       return snackbarNotify.notify({
         type: "error",
-        message: "Ошибка при переходе в диплог",
+        message: "Ошибка при переходе в диалог",
       });
     }
 
@@ -324,20 +316,18 @@ export abstract class ChatGptTemplate {
     this.initialSystemContent = dialog.systemMessage;
     this.systemMessage = new GptMessage(dialog.systemMessage, GPTRoles.system);
 
-    this.messages$.set(
-      messages.map((message) => {
-        const gptMessage = new GptMessage(
-          message.content,
-          message.role as GPTRoles,
-          false,
-          message.error
-        );
+    this.$messages = messages.map((message) => {
+      const gptMessage = new GptMessage(
+        message.content,
+        message.role as GPTRoles,
+        false,
+        message.error
+      );
 
-        gptMessage.failedModeration$.set(message.isFailedModeration);
+      gptMessage.$failedModeration = message.isFailedModeration;
 
-        return gptMessage;
-      })
-    );
+      return gptMessage;
+    });
 
     this.checkOnRunOutOfMessages();
     goToChat();

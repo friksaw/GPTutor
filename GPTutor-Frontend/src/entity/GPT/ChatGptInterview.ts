@@ -3,11 +3,12 @@ import { GptMessage } from "$/entity/GPT/GptMessage";
 import { GPTRoles } from "$/entity/GPT/types";
 import { interviews } from "$/entity/interview";
 import { sig } from "dignals";
+import { createReactiveModelBuilder } from "dignals-model";
 
 export class ChatGptInterview extends ChatGptTemplate {
-  isStarted$ = sig(false);
+  $isStarted = false;
   async sendQuestion(content: string) {
-    this.isStarted$.set(true);
+    this.$isStarted = true;
     const message = new GptMessage(content, GPTRoles.assistant, true);
     this.addMessage(message);
     await this.createHistory();
@@ -15,7 +16,7 @@ export class ChatGptInterview extends ChatGptTemplate {
   }
 
   getMessages() {
-    const messages = this.messages$.get().filter((message) => !message.isError);
+    const messages = this.$messages.filter((message) => !message.isError);
 
     return messages
       .map((message, index) => {
@@ -28,8 +29,8 @@ export class ChatGptInterview extends ChatGptTemplate {
 
         return new GptMessage(
           `Вопрос:
-              ${message.content$.get()}
-              Ответ: ${answer.content$.get()} |
+              ${message.$content}
+              Ответ: ${answer.$content} |
               Проверь, правильный ли ответ, если нет, то объясни почему`,
           GPTRoles.user
         );
@@ -62,3 +63,5 @@ export class ChatGptInterview extends ChatGptTemplate {
     }
   };
 }
+
+export const ChatGptInterviewBuilder = createReactiveModelBuilder(ChatGptInterview);

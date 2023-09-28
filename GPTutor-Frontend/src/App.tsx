@@ -13,7 +13,7 @@ import { useLocation } from "@happysanta/router";
 import "@vkontakte/vkui/dist/vkui.css";
 import "./index.css";
 
-import { vkUserModel } from "./entity/user";
+import {  vkUser } from "./entity/user";
 import { online } from "./api/online";
 
 import { OneDark } from "./OneDark";
@@ -53,7 +53,7 @@ const App = () => {
   useEffect(() => {
     bridge
       .send("VKWebAppGetUserInfo")
-      .then((user) => vkUserModel.fill(user))
+      .then((user) => vkUser.$fillUser(user))
       .catch(goToForbidden);
   }, []);
 

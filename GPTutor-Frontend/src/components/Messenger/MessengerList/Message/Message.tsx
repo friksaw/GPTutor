@@ -22,10 +22,10 @@ interface IProps {
 }
 
 function Message({ chatGpt, message }: IProps) {
-  const runOutOfContextMessages = chatGpt.getRunOutOfContextMessages$.get();
-  const selected = message.isSelected$.get() ? classes.selected : "";
+  const runOutOfContextMessages = chatGpt.$getRunOutOfContextMessages;
+  const selected = message.$isSelected ? classes.selected : "";
 
-  const hasSelectedMessages = chatGpt.hasSelectedMessages$.get();
+  const hasSelectedMessages = chatGpt.$hasSelectedMessages;
 
   const onClickMessage = () => {
     if (!hasSelectedMessages) return;
@@ -47,20 +47,20 @@ function Message({ chatGpt, message }: IProps) {
     >
       <Div className={classes.container}>
         <div className={classes.normalize}>
-          <MessengerAva message={message} photo={vkUser?.photo_100} />
+          <MessengerAva message={message} photo={vkUser?.$photo_100} />
         </div>
         <div style={{ display: "grid", width: "100%" }}>
           <div className={classes.topBlock}>
             <Text weight="2" className={classes.normalize}>
               {message.role === "assistant"
                 ? "GPTutor"
-                : vkUser?.first_name || "Вы"}
+                : vkUser?.$first_name || "Вы"}
             </Text>
             <div className={classes.iconsBlock}>
               {runOutOfContextMessages.find(({ id }) => message.id === id) && (
                 <WarningTooltip />
               )}
-              <Copy textToClickBoard={message.content$.get()} />
+              <Copy textToClickBoard={message.$content} />
               <IconButton
                 className={selected ? classes.selectedIcon : ""}
                 onClick={onSelectFirstMessage}

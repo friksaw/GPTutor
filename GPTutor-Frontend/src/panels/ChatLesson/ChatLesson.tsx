@@ -33,9 +33,9 @@ function ChatLesson({ id }: IProps) {
   };
 
   const additionalRequests = currentLesson?.additionalRequests || [];
-  const isStopped = chatGpt.chatGptLesson.timer.isStopped$.get();
+  const isStopped = chatGpt.chatGptLesson.timer.$isStopped;
   const isTyping = chatGpt.chatGptLesson.sendCompletions$.loading.get();
-  const isBlockActions = chatGpt.chatGptLesson.isBlockActions$.get();
+  const isBlockActions = chatGpt.chatGptLesson.$isBlockActions;
 
   useEffect(() => {
     return () => chatGpt.chatGptLesson.abortSend();

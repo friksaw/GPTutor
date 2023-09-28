@@ -67,7 +67,7 @@ function BlockCode({ elem }: IProps) {
     currentTrainer.initTrainer(getCodeText());
 
     if (location.getViewActivePanel(Views.viewMain) !== Panels.chatTrainer) {
-      chatGpt.chatGptTrainer.messages$.set([]);
+      chatGpt.chatGptTrainer.$messages = [];
     }
 
     goToEditor();

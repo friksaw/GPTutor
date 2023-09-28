@@ -4,10 +4,11 @@ import { GptHistoryDialogs } from "$/entity/GPT/GptHistoryDialogs";
 import { LessonItem, lessonsController, ModeType } from "$/entity/lessons";
 import { ChatGptTemplate } from "$/entity/GPT/ChatGptTemplate";
 import { sig } from "dignals";
-import { ChatGptInterview } from "$/entity/GPT/ChatGptInterview";
+import { ChatGptInterview, ChatGptInterviewBuilder } from "$/entity/GPT/ChatGptInterview";
 import { ChatGptLeetCode } from "$/entity/GPT/ChatGptLeetCode";
 import { interviews } from "$/entity/interview";
 import { ChatGptTrainer } from "$/entity/GPT/ChatGptTrainer";
+import { createReactiveModelBuilder } from "dignals-model";
 
 export class ChatGpt {
   history = new GptHistoryDialogs();
@@ -15,19 +16,19 @@ export class ChatGpt {
 
   chatGptLesson = new ChatGptLesson();
 
-  chatGptInterview = new ChatGptInterview();
+  chatGptInterview = ChatGptInterviewBuilder.create();
 
   chatGptLeetCode = new ChatGptLeetCode();
 
   chatGptTrainer = new ChatGptTrainer();
 
-  currentChatGpt$ = sig<ChatGptTemplate>(this.chatGptFree);
+  $currentChatGpt: ChatGptTemplate = this.chatGptFree;
 
   moveToFreeChat = (goToChat: () => void) => {
     lessonsController.clearLesson();
     this.chatGptFree.currentHistory = null;
 
-    this.currentChatGpt$.set(this.chatGptFree);
+    this.$currentChatGpt = this.chatGptFree;
 
     this.chatGptFree.clearMessages();
     this.chatGptFree.abortSend();
@@ -44,7 +45,7 @@ export class ChatGpt {
     this.chatGptLesson.resetSystemMessage();
     this.chatGptLesson.currentHistory = null;
 
-    this.currentChatGpt$.set(this.chatGptLesson);
+    this.$currentChatGpt = this.chatGptLesson;
     this.chatGptLesson.setInitialSystemMessage(
       lessonsController.currentChapter.get()?.systemMessage
     );
@@ -56,7 +57,7 @@ export class ChatGpt {
 
   moveToInterviewChat(interviewType: string, goToChatInterview: () => void) {
     interviews.setCurrentInterview(interviewType as ModeType);
-    this.chatGptInterview.messages$.set([]);
+    this.chatGptInterview.clearMessages();
     goToChatInterview();
   }
 
@@ -71,12 +72,12 @@ export class ChatGpt {
     if (!dialog) return;
 
     if (dialog.type === "Free") {
-      this.currentChatGpt$.set(this.chatGptFree);
+      this.$currentChatGpt = this.chatGptFree;
       await this.chatGptFree.restoreDialogFromHistory(dialog, goToChatFree);
       return;
     }
     if (dialog.type === ModeType.LeetCode) {
-      this.currentChatGpt$.set(this.chatGptLeetCode);
+      this.$currentChatGpt = this.chatGptLeetCode;
       await this.chatGptLeetCode.restoreDialogFromHistory(
         dialog,
         goToChatLeetCode
@@ -85,7 +86,7 @@ export class ChatGpt {
     }
 
     if (dialog.type.includes("INTERVIEW")) {
-      this.currentChatGpt$.set(this.chatGptInterview);
+      this.$currentChatGpt = this.chatGptInterview;
       await this.chatGptInterview.restoreDialogFromHistory(
         dialog,
         goToChatInterview
@@ -93,13 +94,13 @@ export class ChatGpt {
     }
 
     if (dialog.type && dialog.lessonName) {
-      this.currentChatGpt$.set(this.chatGptLesson);
+      this.$currentChatGpt = this.chatGptLesson;
       await this.chatGptLesson.restoreDialogFromHistory(dialog, goToChatLesson);
       return;
     }
   }
 
-  getCurrentChatGpt = () => this.currentChatGpt$.get();
+  getCurrentChatGpt = () => this.$currentChatGpt;
 }
 
-export const chatGpt = new ChatGpt();
+export const chatGpt = createReactiveModelBuilder(ChatGpt).create();

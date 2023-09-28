@@ -13,11 +13,11 @@ interface IProps {
 }
 
 export function SelectedMessagesBar({ chatGpt }: IProps) {
-  const selectedMessages = chatGpt.selectedMessages$.get();
+  const selectedMessages = chatGpt.$selectedMessages;
 
   const text = selectedMessages.reduce(
     (acc, message, index) =>
-      acc + (index == 0 ? "" : "\n\n") + message.content$.get(),
+      acc + (index == 0 ? "" : "\n\n") + message.$content,
     ""
   );
 

@@ -28,12 +28,12 @@ function MessengerWriteBar({
   scrollToBottom,
   hideDeleteDialog,
 }: IProps) {
-  const hasSelectedMessages = chatGpt.hasSelectedMessages$.get();
+  const hasSelectedMessages = chatGpt.$hasSelectedMessages;
 
   return (
     <div className={classes.container}>
       <div style={{ width: "100%" }}>
-        {chatGpt.isDelay$.get() && <DelayBlock chatGpt={chatGpt} />}
+        {chatGpt.$isDelay && <DelayBlock chatGpt={chatGpt} />}
         <div style={{ display: hasSelectedMessages ? "block" : "none" }}>
           <SelectedMessagesBar chatGpt={chatGpt} />
         </div>
