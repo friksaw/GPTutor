@@ -13,9 +13,9 @@ export class SubscriptionGPT {
   }
 
   async $initAttempts() {
-    const attempts = await this.storageService.get("attempts1");
+    const attempts = await this.storageService.get("attempts");
     if (attempts) return this.$attempts.set(Number(attempts));
-    this.storageService.set("attempts1", String(10));
+    this.storageService.set("attempts", String(10));
     this.$attempts.set(10);
   }
 
@@ -26,7 +26,7 @@ export class SubscriptionGPT {
   $handleSendMessage() {
     if (this.$attempts.get() <= 0) return;
     this.$attempts.set(this.$attempts.get() - 1);
-    this.storageService.set("attempts1", String(this.$attempts.get()));
+    this.storageService.set("attempts", String(this.$attempts.get()));
   }
 
   $subscribe = async () => {
