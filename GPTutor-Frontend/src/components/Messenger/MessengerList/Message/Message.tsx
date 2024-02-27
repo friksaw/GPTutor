@@ -47,7 +47,7 @@ function Message({ chatGpt, message }: IProps) {
     >
       <Div className={classes.container}>
         <div className={classes.normalize}>
-          <MessengerAva message={message} photo={vkUser?.photo_100} />
+          <MessengerAva message={message} photo={vkUser?.photo_200} />
         </div>
         <div style={{ display: "grid", width: "100%" }}>
           <div className={classes.topBlock}>

@@ -6,7 +6,7 @@ export enum AppInstanceType {
 }
 
 class AppService {
-  loading = sig(true);
+  loading = sig(false);
 
   appInstance = (window as any).env.REACT_APP;
 
@@ -21,6 +21,8 @@ class AppService {
   isGPTutor() {
     return this.appInstance === AppInstanceType.GPTutor;
   }
+
+  hasAppInstance() {}
 }
 
 export const appService = new AppService();

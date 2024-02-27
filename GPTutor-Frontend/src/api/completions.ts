@@ -1,4 +1,5 @@
 import { EventSourceMessage, fetchEventSource } from "$/utility";
+import { miniAppSystem } from "$/services/MiniAppSystem";
 
 const BACKEND_HOST = env.REACT_APP_BACKEND_HOST;
 
@@ -15,7 +16,7 @@ export async function sendChatCompletions(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Bearer " + location.href,
+      Authorization: "Bearer " + miniAppSystem.getAuthorization(),
     },
     body: JSON.stringify(body),
     signal: controller.signal,

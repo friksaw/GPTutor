@@ -16,6 +16,11 @@
     flex: none;
 }
 
+.panelHeaderTg :global(.vkuiPanelHeader__after) {
+    min-width: 8px !important;
+    flex: none;
+}
+
 .wrapper {
     display: flex;
     justify-content: space-between;

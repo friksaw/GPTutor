@@ -1,5 +1,6 @@
 import { GroupsIsMemberRequest } from "$/entity/vk";
 import { OrderSubscriptionResponseData } from "$/entity/subscriptions/types";
+import { miniAppSystem } from "$/services/MiniAppSystem";
 
 const BACKEND_HOST = env.REACT_APP_BACKEND_HOST;
 
@@ -11,7 +12,7 @@ export async function groupsIsMember({
     `${BACKEND_HOST}vk/groups-is-member?groupId=${groupId}&userId=${userId}`,
     {
       headers: {
-        Authorization: "Bearer " + location.href,
+        Authorization: "Bearer " + miniAppSystem.getAuthorization(),
       },
     }
   );
@@ -22,7 +23,7 @@ export async function groupsIsMember({
 export async function getUserSubscriptions(): Promise<OrderSubscriptionResponseData> {
   const response = await fetch(`${BACKEND_HOST}vk/user-subscriptions`, {
     headers: {
-      Authorization: "Bearer " + location.href,
+      Authorization: "Bearer " + miniAppSystem.getAuthorization(),
     },
   });
 
@@ -34,7 +35,7 @@ export async function uploadPhoto(uploadUrl: string, imageId: string) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Bearer " + location.href,
+      Authorization: "Bearer " + miniAppSystem.getAuthorization(),
     },
     body: JSON.stringify({ uploadUrl, imageId }),
   });

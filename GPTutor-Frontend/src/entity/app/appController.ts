@@ -1,7 +1,7 @@
 import { sig } from "dignals";
 
 class AppController {
-  showWaitBanner$ = sig<boolean>(true);
+  showWaitBanner$ = sig<boolean>(false);
 
   closeWaitBanner = () => {
     this.showWaitBanner$.set(false);

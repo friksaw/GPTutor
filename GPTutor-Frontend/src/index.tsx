@@ -9,26 +9,24 @@ import { AdaptivityProvider, AppRoot, ConfigProvider } from "@vkontakte/vkui";
 import "react-virtualized/styles.css";
 
 import App from "./App";
-
-import ErrorBoundaryApp from "./ErrorBoundaryApp";
 import { Panels, RoutingPages, Views } from "./entity/routing";
 import { OnboardingService } from "./services/OnboardingService";
 import { NavigationContextProvider } from "$/NavigationContext";
 import { adService } from "$/services/AdService";
-import { authService } from "$/services/AuthService";
-import { groupsService } from "$/services/GroupsService";
 import { appService } from "$/services/AppService";
-import { subscriptionsController } from "$/entity/subscriptions";
 import { imageGeneration } from "$/entity/image";
 import { VkStorageService } from "$/services/VkStorageService";
 import "react-lazy-load-image-component/src/effects/black-and-white.css";
 import { userAgreement } from "$/entity/user/UserAgreement";
+import { telegramService } from "$/services/TelegramService";
+import { miniAppSystem } from "$/services/MiniAppSystem";
+
 const isFirstVisitFlagName = "isFirstVisit";
 
 const storageService = new VkStorageService();
 
-bridge
-  .send("VKWebAppInit")
+miniAppSystem
+  .initApp()
   .then(async () => {
     if (process.env.NODE_ENV === "development") {
       import("./eruda");
@@ -101,7 +99,7 @@ router.start();
 ReactDOM.render(
   <RouterContext.Provider value={router}>
     <NavigationContextProvider>
-      <ConfigProvider>
+      <ConfigProvider appearance={telegramService.colorScheme()}>
         <AdaptivityProvider>
           <AppRoot>
             <App />

@@ -3,6 +3,7 @@ import {
   ModalRoot,
   SplitLayout,
   useConfigProvider,
+  usePlatform,
   View,
 } from "@vkontakte/vkui";
 import bridge from "@vkontakte/vk-bridge";
@@ -40,7 +41,6 @@ import { CodeEditor } from "./panels/CodeEditor";
 import { ChatTrainer } from "./panels/ChatTrainer";
 import { ImageGenerationResult } from "./panels/ImageGenerationResult";
 import UtilBlock from "./UtilBlock";
-
 import { appService } from "$/services/AppService";
 import { LoadingPanel } from "$/panels/LoadingPanel";
 import { ImageGeneration } from "$/panels/ImageGeneration";
@@ -53,15 +53,18 @@ import { PublishingImages } from "$/panels/PublishingImages";
 import { Agreement } from "$/modals/Agreement";
 import { DetailImage } from "$/modals/DetailImage";
 import { WeakRequestModal } from "$/modals/WeakRequestModal";
+import { telegramService } from "$/services/TelegramService";
+import { miniAppSystem } from "$/services/MiniAppSystem";
 
+console.log(telegramService.getTgParams());
 const App = () => {
   const location = useLocation();
   const { goBack, goToForbidden } = useNavigationContext();
   const { appearance } = useConfigProvider();
 
   useEffect(() => {
-    bridge
-      .send("VKWebAppGetUserInfo")
+    miniAppSystem
+      .getUser()
       .then((user) => vkUserModel.fill(user))
       .catch(goToForbidden);
   }, []);

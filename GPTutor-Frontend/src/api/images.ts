@@ -5,6 +5,7 @@ import {
   ImageLikes,
 } from "$/entity/image/types";
 import { ErrorResponseType, Pageable, ResponseData } from "$/entity/common";
+import { miniAppSystem } from "$/services/MiniAppSystem";
 
 const BACKEND_HOST = env.REACT_APP_BACKEND_HOST;
 
@@ -52,7 +53,7 @@ export async function createImageLike(imageId: string): Promise<ImageLikes> {
   const res = await fetch(`${BACKEND_HOST}image/${imageId}/like`, {
     method: "POST",
     headers: {
-      Authorization: "Bearer " + location.href,
+      Authorization: "Bearer " + miniAppSystem.getAuthorization(),
       "Content-Type": "application/json",
     },
   });
@@ -66,7 +67,7 @@ export function getImages(
   return fetch(`${BACKEND_HOST}image?pageNumber=${pageNumber}`, {
     method: "GET",
     headers: {
-      Authorization: "Bearer " + location.href,
+      Authorization: "Bearer " + miniAppSystem.getAuthorization(),
       "Content-Type": "application/json",
     },
   }).then((res) => res.json());
@@ -82,7 +83,7 @@ export function getImagesPublishing(
     {
       method: "GET",
       headers: {
-        Authorization: "Bearer " + location.href,
+        Authorization: "Bearer " + miniAppSystem.getAuthorization(),
         "Content-Type": "application/json",
       },
     }

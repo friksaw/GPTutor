@@ -7,6 +7,7 @@ import {
 } from "@vkontakte/vkui";
 
 import classes from "./AppPanelHeader.module.css";
+import { telegramService } from "$/services/TelegramService";
 
 interface IProps {
   before?: React.ReactNode;
@@ -20,7 +21,8 @@ function AppPanelHeader({ after, before, children }: IProps) {
   return (
     <PanelHeader
       className={classNames(classes.panelHeader, {
-        [classes.panelHeaderVkApps]: platform === Platform.VKCOM,
+        [classes.panelHeaderVkApps]:
+          platform === Platform.VKCOM || telegramService.hasTgInstance(),
       })}
       before={before}
     >

@@ -2,13 +2,17 @@ import React from "react";
 
 import { IconButton, Title } from "@vkontakte/vkui";
 
-import { Icon28ServicesOutline } from "@vkontakte/icons";
+import {
+  Icon28FullscreenOutline,
+  Icon28ServicesOutline,
+} from "@vkontakte/icons";
 
 import { useNavigationContext } from "$/NavigationContext";
 
 import { AppPanelHeader } from "$/components/AppPanelHeader";
 
 import classes from "./HomeHeader.module.css";
+import { telegramService } from "$/services/TelegramService";
 
 function HomeHeader() {
   const { openApplicationInfo } = useNavigationContext();
@@ -21,6 +25,15 @@ function HomeHeader() {
           className={classes.buttonService}
         >
           <Icon28ServicesOutline className={classes.iconService} />
+        </IconButton>
+      }
+      after={
+        <IconButton
+          target="_blank"
+          href={telegramService.getTgApplicationUrl()}
+          rel="noreferrer"
+        >
+          <Icon28FullscreenOutline />
         </IconButton>
       }
     >

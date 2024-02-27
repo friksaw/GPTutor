@@ -72,12 +72,14 @@ export function NavigationContextProvider({
   const router = useRouter();
 
   useEffect(() => {
-    if (appService.isStableArt()) {
-      router.replacePage(RoutingPages.generationImages);
-      return;
-    }
-
-    router.replacePage(RoutingPages.home);
+    setTimeout(() => {
+      // if (appService.isStableArt()) {
+      //   router.replacePage(RoutingPages.generationImages);
+      //   return;
+      // }
+      //
+      // router.replacePage(RoutingPages.home);
+    }, 100);
   }, []);
 
   const activePanel = location.getViewActivePanel(Views.viewMain)!;
