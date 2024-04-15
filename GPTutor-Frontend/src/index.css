@@ -63,7 +63,7 @@ th {
     padding: 5px;
 }
 
-tfoot > tr  {
+tfoot > tr {
     background: black;
     color: white;
 }
@@ -99,27 +99,27 @@ tfoot > tr  {
 }
 
 
-[data-mock-button] button{
+[data-mock-button] button {
     transition: opacity 0.3s;
 }
 
-[data-mock-button] button{
+[data-mock-button] button {
     transition: opacity 0.3s;
 }
 
-[data-mock-button] button:hover{
+[data-mock-button] button:hover {
     opacity: 0.8;
 }
 
-[data-mock-button] button:hover{
+[data-mock-button] button:hover {
     opacity: 0.8;
 }
 
-[data-mock-button] button:active{
+[data-mock-button] button:active {
     opacity: 0.6;
 }
 
-[data-mock-button] button:active{
+[data-mock-button] button:active {
     opacity: 0.6;
 }
 
@@ -135,3 +135,55 @@ tfoot > tr  {
     --vkui--size_border_radius--regular: 12px;
     --vkui--size_card_border_radius--regular: 12px;
 }
+
+
+.dnd {
+    --font: "Balsamiq Sans", cursive;
+    --vkui--color_background_content: #f2eee4;
+    --vkui--color_separator_primary: #B89A67;
+    --vkui--color_background_modal: #F2ECE4;
+    --vkui--color_field_border_alpha: #B89A67;
+    --vkui--color_icon_secondary: #B89A67;
+    --vkui--font_headline1--font_family--regular: var(--font);
+    --vkui--font_title2--font_family--regular: var(--font);
+    --vkui--font_text--font_family--regular: var(--font);
+    --vkui--font_headline2--font_family--regular: var(--font);
+    --vkui--font_subhead--font_family--regular: var(--font);
+    --vkui--font_paragraph--font_family--regular: var(--font);
+}
+
+.vkuiButton--mode-primary.vkuiButton--appearance-accent {
+    background-color: #9C2B1B;
+    color: #fff;
+}
+
+.vkuiPlaceholder__header {
+    color: #000;
+}
+
+.vkuiPlaceholder__text {
+    color: #000;
+}
+
+.vkuiSimpleCell {
+    color: #000;
+}
+
+.vkuiButton--mode-outline {
+    box-shadow: inset 0 0 0 1px #9C2B1B !important;
+    color: #9C2B1B !important;
+}
+
+.vkuiPanelHeader__in {
+    background-image: url("/public/background.png");
+    /*box-shadow: 0 0 0 2px #E69A28 inset !important;*/
+}
+
+.vkuiWriteBar {
+
+}
+
+body {
+
+}
+

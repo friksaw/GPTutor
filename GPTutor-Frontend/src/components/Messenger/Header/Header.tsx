@@ -42,28 +42,34 @@ function Header({ goBack, isTyping }: IProps) {
             size={24}
             fallbackIcon={
               <div className={classes.fallbackIcon}>
-                <ChatGPTLogo />
+                <img
+                  style={{ borderRadius: "50%" }}
+                  width={36}
+                  height={36}
+                  src="https://i.etsystatic.com/8939817/r/il/f2a7cd/1024896184/il_1588xN.1024896184_m4pv.jpg"
+                  alt=""
+                />
               </div>
             }
           />
         }
-        subtitle={
-          <div className={classes.headerSubtitle}>
-            {isTyping ? (
-              <>
-                <IsTypingLoader />
-                Печатает
-              </>
-            ) : (
-              <>
-                онлайн
-                <Icon12OnlineMobile className={classes.iconMobile} />
-              </>
-            )}
-          </div>
-        }
+        // subtitle={
+        //   <div className={classes.headerSubtitle}>
+        //     {isTyping ? (
+        //       <>
+        //         <IsTypingLoader />
+        //         Печатает
+        //       </>
+        //     ) : (
+        //       <>
+        //         онлайн
+        //         <Icon12OnlineMobile className={classes.iconMobile} />
+        //       </>
+        //     )}
+        //   </div>
+        // }
       >
-        <Text weight="1">GPTutor</Text>
+        <Text weight="1">Master</Text>
       </SimpleCell>
     </AppPanelHeader>
   );

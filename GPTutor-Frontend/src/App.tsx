@@ -94,7 +94,7 @@ const App = () => {
 
   return (
     <ConfigProvider
-      appearance={vkBridgeAppearance}
+      appearance="dark"
       platform={vk_platform === "desktop_web" ? "vkcom" : undefined}
       isWebView={bridge.isWebView()}
       hasCustomPanelHeaderAfter={true}
@@ -103,6 +103,7 @@ const App = () => {
         <AppRoot mode="full" safeAreaInsets={vkBridgeInsets}>
           {vkBridgeAppearance === "dark" ? <OneDark /> : <OneLight />}
           <SplitLayout
+            className="dnd"
             popout={
               <>
                 <AppAlert id={Modals.alert} />

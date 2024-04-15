@@ -57,7 +57,7 @@ function WriteBarAfter({
           disabled={value.trim().length === 0 || isTyping || blockActions}
           onClick={sendMessage}
         >
-          <Icon28Send fill="var(--vkui--color_icon_accent)" />
+          <Icon28Send />
         </WriteBarIcon>
       ) : (
         <WriteBarIcon onClick={chatGptModel.abortSend}>

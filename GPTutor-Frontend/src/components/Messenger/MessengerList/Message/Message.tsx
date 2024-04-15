@@ -53,7 +53,7 @@ function Message({ chatGpt, message }: IProps) {
           <div className={classes.topBlock}>
             <Text weight="2" className={classes.normalize}>
               {message.role === "assistant"
-                ? "GPTutor"
+                ? "Master"
                 : vkUser?.first_name || "Вы"}
             </Text>
             <div className={classes.iconsBlock}>
