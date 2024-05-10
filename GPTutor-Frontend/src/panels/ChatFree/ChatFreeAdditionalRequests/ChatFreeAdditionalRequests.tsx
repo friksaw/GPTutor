@@ -30,6 +30,8 @@ function ChatFreeAdditionalRequests({ handleSend }: IProps) {
 
   const requests = additionalRequests.getAvailableRequests();
 
+  const files = chatGpt.chatGptFree.files$.get();
+
   return (
     <>
       <Separator wide />
@@ -80,6 +82,13 @@ function ChatFreeAdditionalRequests({ handleSend }: IProps) {
           <Icon28WriteOutline />
         </IconButton>
       </div>
+      {files.length > 0 && (
+        <div>
+          {files.map((file) => (
+            <Image src={file} />
+          ))}
+        </div>
+      )}
     </>
   );
 }

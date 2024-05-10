@@ -77,6 +77,8 @@ export abstract class ChatGptTemplate {
 
   abortController = new AbortController();
 
+  files$ = sig<File[]>([]);
+
   disableTimer() {
     this.timer.stop();
     this.timer.setDisabled();
@@ -116,6 +118,14 @@ export abstract class ChatGptTemplate {
   abortSend = () => {
     this.abortController.abort();
     this.closeDelay();
+  };
+
+  setFiles = (files: File[]) => {
+    this.files$.set(files);
+  };
+
+  clearFiles = () => {
+    this.files$.set([]);
   };
 
   blockActions = () => {

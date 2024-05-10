@@ -1,0 +1,5 @@
+.messengerListContainer {
+    order: 1;
+    flex-grow: 1;
+    flex-basis: 65%;
+}
