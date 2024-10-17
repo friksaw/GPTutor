@@ -34,6 +34,7 @@ function TabbarApp({ setRef }: IProps) {
     goToGenerationImages,
     goToAnecdoteGeneration,
     goToAnecdoteNews,
+    goToCreateMidjourneyImage,
   } = useNavigationContext();
 
   const platform = usePlatform();
@@ -70,6 +71,41 @@ function TabbarApp({ setRef }: IProps) {
             onClick={goToGallery}
           >
             <Icon20PictureStack width={28} height={28} />
+          </TabbarItem>
+        </div>
+      </Tabbar>
+    );
+  }
+
+  if (appService.isMidjourney()) {
+    return (
+      <Tabbar
+        className={classes.tabBar}
+        style={{ display: "grid" }}
+        mode={platform === Platform.VKCOM ? "horizontal" : "vertical"}
+      >
+        <Separator wide style={{ width: "100%" }} />
+        <div
+          ref={setRef}
+          style={{ display: "flex", justifyContent: "space-between" }}
+        >
+          <TabbarItem
+            className={classNames(classes.tabItem, {
+              [classes.tabItemActive]: activePanel === Panels.createMidjourneyImage,
+            })}
+            text="Генератор"
+            onClick={goToCreateMidjourneyImage}
+          >
+            <Icon24MagicWandOutline width={28} height={28} />
+          </TabbarItem>
+          <TabbarItem
+            className={classNames(classes.tabItem, {
+              [classes.tabItemActive]: activePanel === Panels.gptutorProfile,
+            })}
+            text="Профиль"
+            onClick={goToGPTutorProfileReplace}
+          >
+            <Icon28UserRectangleHorizontalOutline />
           </TabbarItem>
         </div>
       </Tabbar>

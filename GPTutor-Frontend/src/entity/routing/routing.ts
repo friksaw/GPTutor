@@ -41,6 +41,8 @@ export enum RoutingPages {
   vkDocQuestionPanel = "/vk-doc-question-panel",
 
   vkDocQuestionRequest = "/vk-doc-question-request",
+
+  createMidjourneyImage = "/create-midjourney-image"
 }
 
 export enum Views {
@@ -89,6 +91,7 @@ export enum Panels {
   vkDocQuestionPanel = "vk-doc-question-panel",
 
   vkDocQuestionRequest = "vk-doc-question-request",
+  createMidjourneyImage = "create-midjourney-image",
 }
 
 export enum Modals {

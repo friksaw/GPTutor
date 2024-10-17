@@ -10,6 +10,7 @@ import {
 import classes from "./LoadingPanel.module.css";
 import { ChatGPTLogo, StableArtLogo } from "$/icons";
 import { appService } from "$/services/AppService";
+import { MidjourneyLogo } from "$/icons/MidjourneyLogo";
 
 function getLoadingLogo(platform: PlatformType) {
   if (appService.isGPTutor()) {
@@ -24,6 +25,15 @@ function getLoadingLogo(platform: PlatformType) {
   if (appService.isStableArt()) {
     return (
       <StableArtLogo
+        size={platform === Platform.VKCOM ? 96 : 56}
+        borderRadius="20px"
+      />
+    );
+  }
+
+  if (appService.isMidjourney()) {
+    return (
+      <MidjourneyLogo
         size={platform === Platform.VKCOM ? 96 : 56}
         borderRadius="20px"
       />

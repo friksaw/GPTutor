@@ -64,11 +64,41 @@ export class OnboardingService {
       .catch((e) => console.error(e));
   }
 
+  midjourneyOnBoarding() {
+    bridge
+      .send("VKWebAppShowSlidesSheet" as any, {
+        slides: [
+          {
+            media: { blob: slidesStableArt.firstSlide, type: "image" },
+            title: "Добро пожаловать!",
+            subtitle:
+              "Генерируйте любые изображения с помощью технологии Stable Diffusion!",
+          },
+          {
+            media: { blob: slidesStableArt.secondSlide, type: "image" },
+            title: "Генерируйте совершенно любые образы!",
+            subtitle:
+              "С помощью редактора с искусственным интеллектом, который предложит яркие образы!",
+          },
+          {
+            media: { blob: slidesStableArt.thirdSlide, type: "image" },
+            title: "Улучшайте результаты!",
+            subtitle:
+              "С помощью расширенных настроек Stable Diffusion получайте идеальные изображения!",
+          },
+        ],
+      })
+      .then((e) => console.log(e))
+      .catch((e) => console.error(e));
+  }
+
   async runOnBoarding() {
     if (appService.isGPTutor()) {
       this.gptutorOnBoarding();
-    } else {
+    } else if (appService.isStableArt()) {
       this.stableArtOnBoarding();
+    } else if (appService.isMidjourney()) {
+      this.midjourneyOnBoarding();
     }
   }
 }

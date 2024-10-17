@@ -57,6 +57,7 @@ bridge
 
 const routes = {
   [RoutingPages.home]: new Page(Panels.home, Views.viewMain),
+  [RoutingPages.createMidjourneyImage]: new Page(Panels.createMidjourneyImage, Views.viewMain),
   [RoutingPages.chapters]: new Page(Panels.chapters, Views.viewMain),
   [RoutingPages.chatFree]: new Page(Panels.chatFree, Views.viewMain),
   [RoutingPages.chatLesson]: new Page(Panels.chatLesson, Views.viewMain),

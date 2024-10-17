@@ -35,6 +35,7 @@ import { Modes } from "./panels/Modes";
 
 import { useNavigationContext } from "./NavigationContext";
 import { SnackbarNotifier } from "./components/SnackbarNotifier";
+import { CreateMidjourneyImage } from "./panels/CreateMidjourneyImage";
 import { ChatSettings } from "./panels/ChatSettings";
 import { ApplicationInfo } from "./modals/ApplicationInfo";
 import { ChatFree } from "./panels/ChatFree";
@@ -147,6 +148,7 @@ const App = () => {
                 onSwipeBack={goBack}
                 history={history}
               >
+                <CreateMidjourneyImage id={Panels.createMidjourneyImage} />
                 <ChatSettings id={Panels.chatSettings} />
                 <CodeEditor id={Panels.editor} />
                 <ChatTrainer id={Panels.chatTrainer} />

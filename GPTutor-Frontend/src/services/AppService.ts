@@ -2,6 +2,7 @@ import { sig } from "dignals";
 import { RoutingPages } from "$/entity/routing";
 
 export enum AppInstanceType {
+  Midjourney = "Midjourney",
   StableArt = "Stable Art",
   GPTutor = "GPTutor",
   AiHumor = "AiHumor",
@@ -15,6 +16,10 @@ class AppService {
 
   toggleLoading() {
     this.loading.set(!this.loading.get());
+  }
+
+  isMidjourney() {
+    return this.appInstance === AppInstanceType.Midjourney;
   }
 
   isStableArt() {
@@ -40,6 +45,10 @@ class AppService {
   getBasePanel() {
     if (this.isGPTutor()) {
       return RoutingPages.home;
+    }
+
+    if (this.isMidjourney()) {
+      return RoutingPages.createMidjourneyImage;
     }
 
     if (this.isStableArt()) {

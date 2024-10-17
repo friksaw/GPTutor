@@ -57,6 +57,7 @@ export type NavigationContextType = {
   goToAnecdoteMain: () => void;
   goToBingPanel: () => void;
   goToVkDocQuestionRequest: () => void;
+  goToCreateMidjourneyImage: () => void;
   openAlert: (data: AlertType) => void;
   alert: AlertType;
   isForbidden: boolean;
@@ -223,6 +224,10 @@ export function NavigationContextProvider({
     router.pushPage(RoutingPages.vkDocQuestionRequest);
   };
 
+  const goToCreateMidjourneyImage = () => {
+    router.pushPage(RoutingPages.createMidjourneyImage);
+  };
+
   return (
     <NavigationContext.Provider
       value={{
@@ -268,6 +273,7 @@ export function NavigationContextProvider({
         goToBingPanel,
         alert,
         isForbidden,
+        goToCreateMidjourneyImage,
       }}
     >
       {children}
